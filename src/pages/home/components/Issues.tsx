@@ -1,6 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useCallback, useEffect, useState } from 'react';
 import { Card } from '../../../components/Cards';
 import { Typography } from '../../../components/Typography';
+import { api } from '../../../lib/axios';
 import { css } from '../../../styles/theme/default';
 
 const ISSUES_DATA = [
@@ -54,10 +56,37 @@ const IssueHeader = css({
 	justifyContent: 'space-between'
 });
 
+interface IIssuesProps {
+	title: string;
+	updated_at: string;
+	body: string;
+}
+
 export function Issues() {
+	const [issuesData, setIssuesData] = useState<IIssuesProps[]>([]);
+
+	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				setIsLoading(true);
+				const { data } = await api.get(
+					'/repos/Joaopsguimaraes/desafio03-github-blog/issues'
+				);
+				console.log(data);
+				setIssuesData(data);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setIsLoading(false);
+			}
+		})();
+	}, []);
+
 	return (
 		<div className={Container()}>
-			{ISSUES_DATA.map((issue, index) => (
+			{issuesData.map((issue, index) => (
 				<Card
 					css={{ flexDirection: 'column', maxWidth: '450px', gap: 10 }}
 					key={index}
@@ -66,9 +95,9 @@ export function Issues() {
 						<Typography size="20" weight="bold">
 							{issue.title}
 						</Typography>
-						<Typography size="14">{issue.publishAt}</Typography>
+						<Typography size="14">{issue.updated_at}</Typography>
 					</div>
-					<Typography>{issue.description}</Typography>
+					<Typography>{issue.body}</Typography>
 				</Card>
 			))}
 		</div>

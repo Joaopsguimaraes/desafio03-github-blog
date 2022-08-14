@@ -1,23 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
-import * as AspectRatioPrimitive from '@radix-ui/react-aspect-ratio';
+import { useEffect, useState } from 'react';
 import { FaBuilding, FaGithub, FaUserFriends } from 'react-icons/fa';
 
 import { Card } from '../../../components/Cards';
 import { Link } from '../../../components/Link';
 import { Typography } from '../../../components/Typography';
-import { css, styled } from '../../../styles/theme/default';
-
-export const AspectRatio = AspectRatioPrimitive;
-
-const Box = styled('div', {
-	maxWidth: 150,
-	maxHeight: 150
-});
-const Img = styled('img', {
-	objectFit: 'cover',
-	width: '100%',
-	height: '100%'
-});
+import { api } from '../../../lib/axios';
+import { css } from '../../../styles/theme/default';
+import { Avatar } from './Avatar';
 
 const dataUser = css({
 	display: 'flex',
@@ -30,37 +20,39 @@ const dataSocial = css({
 	display: 'flex',
 	marginTop: 'auto',
 	gap: 20,
-	alignItems: 'center',
+	alignItems: 'center'
 });
 
-interface AvatarProps {
-  src: string;
-  alt?: string;
-  ratio: number;
+interface User {
+  bio: string;
+  name: string;
+	company: string;
+  login: string;
+  following: number;
 }
 
-function Avatar({ src, alt, ratio }: AvatarProps) {
+export function User() {
+	const [userGitHub, setUserGitHub] = useState<User>({} as User);
+
+	useEffect(() => {
+		(async () => {
+			const { data } = await api.get('/users/Joaopsguimaraes');
+			setUserGitHub((state) => ({ ...state, ...data }));
+		})();
+	}, []);
+
 	return (
-		<Box
+		<Card
 			css={{
-				width: 300,
-				borderRadius: 6,
-				overflow: 'hidden',
-				boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+				marginTop: 300,
+				gap: 20,
+				maxWidth: 900,
+				maxHeight: 250,
+				position: 'relative'
 			}}
 		>
-			<AspectRatio.Root ratio={ratio}>
-				<Img src={src} alt={alt} />
-			</AspectRatio.Root>
-		</Box>
-	);
-}
-
-export function User(){
-	return(
-		<Card css={{ marginTop: 300, gap: 20, maxWidth: 900, maxHeight: 250, position: 'relative'}}>
 			<div>
-				<Avatar src="https://github.com/Joaopsguimaraes.png" ratio={1} />
+				<Avatar />
 			</div>
 			<div className={dataUser()}>
 				<Typography
@@ -73,31 +65,27 @@ export function User(){
 						alignItems: 'center'
 					}}
 				>
-            Joao Guimaraes
-					<Link href='https://github.com/Joaopsguimaraes' target='_blank'>GITHUB</Link>
+					{userGitHub.name}
+					<Link href="https://github.com/Joaopsguimaraes" target="_blank">
+            GITHUB
+					</Link>
 				</Typography>
-				<Typography>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Atque
-            tempora accusantium voluptatibus maxime eveniet, iure accusamus
-            distinctio id fugit provident deleniti nulla ab nam consectetur est
-            blanditiis eius culpa sed.
-				</Typography>
+				<Typography>{userGitHub.bio}</Typography>
 				<div className={dataSocial()}>
-					<Typography css={{gap: 8}}>
+					<Typography css={{ gap: 8 }}>
 						<FaGithub size={18} />
-              Joaopsguimaraes
+						{userGitHub.login}
 					</Typography>
-					<Typography css={{gap: 8}}>
+					<Typography css={{ gap: 8 }}>
 						<FaBuilding size={18} />
-              Kingspan Isoeste
+						{userGitHub.company}
 					</Typography>
-					<Typography css={{gap: 8}}>
+					<Typography css={{ gap: 8 }}>
 						<FaUserFriends size={18} />
-              4 seguidores
+						{userGitHub.following} seguidores
 					</Typography>
 				</div>
 			</div>
 		</Card>
 	);
 }
-
