@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import * as AspectRatioPrimitive from '@radix-ui/react-aspect-ratio';
-import { styled } from '../../../styles/theme/default';
+import { styled } from '../styles/theme/default';
 
 export const AspectRatio = AspectRatioPrimitive;
 
@@ -10,8 +10,7 @@ const Box = styled('div', {
 });
 const Img = styled('img', {
 	objectFit: 'cover',
-	width: '100%',
-	height: '100%'
+	width: '100%'
 });
 
 export function Avatar() {

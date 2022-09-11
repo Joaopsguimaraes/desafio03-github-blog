@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { ReactNode } from 'react';
-import coverImage from '../../../assets/cover-header.png';
-import { styled } from '../../../styles/theme/default';
+import coverImage from '../assets/cover-header.png';
+import { styled } from '../styles/theme/default';
 
 const StyledBox = styled('div', {
 	display: 'flex',

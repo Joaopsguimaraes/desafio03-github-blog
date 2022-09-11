@@ -1,32 +1,16 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useEffect, useState } from 'react';
 import { FaBuilding, FaGithub, FaUserFriends } from 'react-icons/fa';
-
-import { Card } from '../../../components/Cards';
-import { Link } from '../../../components/Link';
-import { Typography } from '../../../components/Typography';
-import { api } from '../../../lib/axios';
-import { css } from '../../../styles/theme/default';
+import { api } from '../lib/axios';
+import { CardUser, DataUser } from '../styles/components/CardUser';
+import { Link } from '../styles/components/Link';
+import { Typography } from '../styles/components/Typography';
 import { Avatar } from './Avatar';
-
-const dataUser = css({
-	display: 'flex',
-	gap: 10,
-	flexDirection: 'column',
-	alignItems: 'flex-start'
-});
-
-const dataSocial = css({
-	display: 'flex',
-	marginTop: 'auto',
-	gap: 20,
-	alignItems: 'center'
-});
 
 interface User {
   bio: string;
   name: string;
-	company: string;
+  company: string;
   login: string;
   following: number;
 }
@@ -42,19 +26,11 @@ export function User() {
 	}, []);
 
 	return (
-		<Card
-			css={{
-				marginTop: 300,
-				gap: 20,
-				maxWidth: 900,
-				maxHeight: 250,
-				position: 'relative'
-			}}
-		>
+		<CardUser>
 			<div>
 				<Avatar />
 			</div>
-			<div className={dataUser()}>
+			<DataUser>
 				<Typography
 					size="24"
 					weight="bold"
@@ -71,7 +47,7 @@ export function User() {
 					</Link>
 				</Typography>
 				<Typography>{userGitHub.bio}</Typography>
-				<div className={dataSocial()}>
+				<div>
 					<Typography css={{ gap: 8 }}>
 						<FaGithub size={18} />
 						{userGitHub.login}
@@ -85,7 +61,7 @@ export function User() {
 						{userGitHub.following} seguidores
 					</Typography>
 				</div>
-			</div>
-		</Card>
+			</DataUser>
+		</CardUser>
 	);
 }
